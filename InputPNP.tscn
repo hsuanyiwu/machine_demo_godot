@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://PnpArm.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Acuator.tscn" type="PackedScene" id=2]
+[ext_resource path="res://InputPNP.cs" type="Script" id=3]
+
+[node name="InputPNP" type="ColorRect"]
+margin_left = 1.0
+margin_top = -3.0
+margin_right = 201.0
+margin_bottom = 2.0
+color = Color( 0.121569, 0.47451, 0.705882, 1 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MoveX" parent="." instance=ExtResource( 2 )]
+position = Vector2( 180, 0 )
+ReverseDir = true
+Speed = 150.0
+
+[node name="PnpArm" parent="MoveX" instance=ExtResource( 1 )]
