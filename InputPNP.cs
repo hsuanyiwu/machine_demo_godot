@@ -14,13 +14,23 @@ public class InputPNP : ColorRect
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        _xMove = GetNode<Acuator>("MoveX");
-        _pnpArm = GetNode<PnpArm>("MoveX/PnpArm");
+        _xMove = GetNode<Acuator>("Acuator");
+        _pnpArm = GetNode<PnpArm>("Acuator/PnpArm");
     }
 
     public PnpArm GetArm()
     {
-        return GetNode<PnpArm>("MoveX/PnpArm");
+        return GetNode<PnpArm>("Acuator/PnpArm");
+    }
+
+    public ProcessFrame ToPick()
+    {
+        return _xMove.MoveTo(_xPosPick);
+    }
+
+    public ProcessFrame ToPlace()
+    {
+        return _xMove.MoveTo(_xPosPlace);
     }
 
     public void RunLoop()
@@ -30,6 +40,10 @@ public class InputPNP : ColorRect
 
     //  // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
+    {
+    }
+
+    private void RunLoop_()
     {
         // run loop
         switch (_step)

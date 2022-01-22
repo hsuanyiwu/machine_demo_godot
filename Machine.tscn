@@ -1,18 +1,26 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://assets/stack.png" type="Texture" id=1]
 [ext_resource path="res://assets/car_b.png" type="Texture" id=2]
-[ext_resource path="res://assets/car_a.png" type="Texture" id=3]
+[ext_resource path="res://Car.tscn" type="PackedScene" id=3]
 [ext_resource path="res://PnpArm.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Acuator.tscn" type="PackedScene" id=5]
 [ext_resource path="res://InputPNP.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Machine.cs" type="Script" id=7]
+[ext_resource path="res://BackPNP.cs" type="Script" id=8]
+[ext_resource path="res://OutputPNP.cs" type="Script" id=9]
+[ext_resource path="res://Flipper.cs" type="Script" id=10]
+[ext_resource path="res://assets/flipper.png" type="Texture" id=11]
+[ext_resource path="res://Sucker.cs" type="Script" id=12]
 
 [node name="Machine" type="Node2D"]
+script = ExtResource( 7 )
 
 [node name="ColorRect" type="ColorRect" parent="."]
 margin_right = 630.0
 margin_bottom = 450.0
 __meta__ = {
+"_edit_group_": true,
 "_edit_use_anchors_": false
 }
 
@@ -27,45 +35,26 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Y1" type="ColorRect" parent="."]
-margin_left = 428.0
-margin_top = 11.0
-margin_right = 432.0
-margin_bottom = 411.0
-color = Color( 0.133333, 0.529412, 0.764706, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="CarA" type="TextureRect" parent="Y1"]
-margin_left = -33.0
-margin_top = 280.0
-margin_right = 37.0
-margin_bottom = 386.0
-texture = ExtResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Y2" type="ColorRect" parent="."]
-margin_left = 277.0
+[node name="CarA" parent="." instance=ExtResource( 3 )]
+margin_left = 430.0
 margin_top = 10.0
-margin_right = 281.0
+margin_right = 434.0
 margin_bottom = 410.0
-color = Color( 0.117647, 0.537255, 0.717647, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+_yPosIn = 270.0
+_yPosOut = 10.0
+_yPosPark = 270.0
 
-[node name="CarB" type="TextureRect" parent="Y2"]
-margin_left = -32.0
-margin_top = 281.0
-margin_right = 36.0
-margin_bottom = 385.0
+[node name="CarB" parent="." instance=ExtResource( 3 )]
+margin_left = 280.0
+margin_top = 10.0
+margin_right = 284.0
+margin_bottom = 410.0
+_yPosIn = 10.0
+_yPosOut = 270.0
+_yPosPark = 270.0
+
+[node name="Platform" parent="CarB/Acuator" index="0"]
 texture = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="InputPNP" parent="." instance=ExtResource( 6 )]
 margin_left = 326.0
@@ -79,9 +68,12 @@ margin_top = 51.0
 margin_right = 460.0
 margin_bottom = 56.0
 color = Color( 0.121569, 0.490196, 0.670588, 1 )
+script = ExtResource( 8 )
 __meta__ = {
+"_edit_group_": true,
 "_edit_use_anchors_": false
 }
+_xPanelOut = 75.0
 
 [node name="Acuator" parent="BackPNP" instance=ExtResource( 5 )]
 position = Vector2( 110, 0 )
@@ -95,22 +87,49 @@ margin_top = 235.0
 margin_right = 383.0
 margin_bottom = 240.0
 color = Color( 0.0980392, 0.278431, 0.705882, 1 )
+script = ExtResource( 9 )
 __meta__ = {
+"_edit_group_": true,
 "_edit_use_anchors_": false
 }
+_xPanelIn = 160
+_xPanelOut0 = 75
 
 [node name="Acuator" parent="OutputPNP" instance=ExtResource( 5 )]
 position = Vector2( 20, 0 )
+Speed = 100.0
 
 [node name="PnpArm" parent="OutputPNP/Acuator" instance=ExtResource( 4 )]
 
 [node name="Flipper" type="ColorRect" parent="."]
-margin_left = 318.0
-margin_top = 132.0
-margin_right = 388.0
-margin_bottom = 140.0
-rect_pivot_offset = Vector2( 0, 4 )
-color = Color( 0.313726, 0.290196, 0.290196, 1 )
+margin_left = 315.0
+margin_top = 135.0
+margin_right = 329.0
+margin_bottom = 149.0
+color = Color( 0.627451, 0.596078, 0.596078, 1 )
+script = ExtResource( 10 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Acuator" parent="Flipper" instance=ExtResource( 5 )]
+position = Vector2( 7, 5 )
+DirType = 2
+ReverseDir = true
+Speed = 100.0
+
+[node name="Platform" type="TextureRect" parent="Flipper/Acuator"]
+margin_top = -4.0
+margin_right = 70.0
+margin_bottom = 4.0
+rect_scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 11 )
+script = ExtResource( 12 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+BlowTime = 500
+
+[editable path="CarA"]
+[editable path="CarB"]

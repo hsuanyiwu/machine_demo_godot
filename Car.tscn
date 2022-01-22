@@ -1,0 +1,42 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Car.cs" type="Script" id=1]
+[ext_resource path="res://assets/car_a.png" type="Texture" id=2]
+[ext_resource path="res://Acuator.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Sucker.cs" type="Script" id=4]
+[ext_resource path="res://assets/camera.png" type="Texture" id=5]
+
+[node name="Car" type="ColorRect"]
+margin_right = 4.0
+margin_bottom = 400.0
+color = Color( 0.65098, 0.729412, 0.776471, 1 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Acuator" parent="." instance=ExtResource( 3 )]
+position = Vector2( 0, 10 )
+DirType = 1
+Speed = 150.0
+
+[node name="Platform" type="TextureRect" parent="Acuator"]
+margin_left = -35.0
+margin_right = 35.0
+margin_bottom = 106.0
+texture = ExtResource( 2 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_left = -30.0
+margin_top = 150.0
+margin_right = 29.0
+margin_bottom = 196.0
+texture = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

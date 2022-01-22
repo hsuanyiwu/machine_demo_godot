@@ -3,31 +3,63 @@ using System;
 
 public class PnpArm : TextureRect
 {
-    private int _step = -1;
     private Acuator _zMove;
-    private int _speed = 5;
+    [Export]
     private int _zPosDown = 20;
     private int _zPosUp = 0;
-    private int _pos0;
-    private float _timeTick;
 
-    private TextureRect _sucker;
+    private Sucker _sucker;
 
     public override void _Ready()
     {
         _zMove = GetNode<Acuator>("Acuator");
-        _sucker = GetNode<TextureRect>("Acuator/Sucker");
+        _sucker = GetNode<Sucker>("Acuator/Sucker");
     }
 
-    public void Pick()
+    public ProcessFrame Pick()
     {
-        _step = 100;
+        return ProcessFrame.Create((p) =>
+        {
+            switch (p.Step)
+            {
+                case ProcessFrame.ENTER:
+                    p.aWait(_zMove.MoveTo(_zPosDown));
+                    break;
+                case 1:
+                    p.aWait(_sucker.Suck());
+                    break;
+                case 2:
+                    p.aWait(_zMove.MoveTo(_zPosUp));
+                    break;
+                case 3:
+                    p.Exit();
+                    break;
+            }
+        });
     }
 
-    public void Place()
+    public ProcessFrame Place()
     {
-        _step = 200;
+        return ProcessFrame.Create((p) =>
+        {
+            switch (p.Step)
+            {
+                case ProcessFrame.ENTER:
+                    p.aWait(_zMove.MoveTo(_zPosDown));
+                    break;
+                case 1:
+                    p.aWait(_sucker.Blow());
+                    break;
+                case 2:
+                    p.aWait(_zMove.MoveTo(_zPosUp));
+                    break;
+                case 3:
+                    p.Exit();
+                    break;
+            }
+        });
     }
+
 
     public bool MotionDone
     {
@@ -36,6 +68,13 @@ public class PnpArm : TextureRect
 
     //  // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
+    {
+    }
+
+    int _step;
+    float _timeTick;
+
+    public void RunLoop_(float delta)
     {
         switch (_step)
         {

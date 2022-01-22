@@ -15,9 +15,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MoveX" parent="." instance=ExtResource( 2 )]
+[node name="Acuator" parent="." instance=ExtResource( 2 )]
 position = Vector2( 180, 0 )
 ReverseDir = true
-Speed = 150.0
+Speed = 100.0
 
-[node name="PnpArm" parent="MoveX" instance=ExtResource( 1 )]
+[node name="PnpArm" parent="Acuator" instance=ExtResource( 1 )]

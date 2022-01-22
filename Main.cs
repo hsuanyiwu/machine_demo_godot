@@ -17,12 +17,17 @@ public class Main : Node2D
     //  // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
     {
-
     }
 
-    public void _on_Button_pressed()
+    public void _on_BtnStart_pressed()
     {
-        //GetNode<InputPNP>("Machine/InputPNP").GetArm().Pick();
-        GetNode<InputPNP>("Machine/InputPNP").RunLoop();
+        var machine = GetNode<Machine>("Machine");
+        var runAuto = GetNode<AutoRun>("AutoRun");
+        ProcessFrame.Emit(runAuto.StartRun(machine));
+    }
+
+    public void _on_BtnFeedOnce_pressed()
+    {
+
     }
 }
