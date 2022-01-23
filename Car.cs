@@ -39,6 +39,16 @@ public class Car : ColorRect
         return _yMove.MoveTo(_yPosOut);
     }
 
+    public ProcessFrame Suck()
+    {
+        return GetNode<Sucker>("Acuator/Platform").Suck();
+    }
+
+    public ProcessFrame Blow()
+    {
+        return GetNode<Sucker>("Acuator/Platform").Blow();
+    }
+
     public ProcessFrame DoScan()
     {
         return ProcessFrame.Create((p) =>

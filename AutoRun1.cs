@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class AutoRun : Node
+public class AutoRun1 : Node
 {
     // Declare member variables here. Examples:
     // private int a = 2;
@@ -19,12 +19,6 @@ public class AutoRun : Node
     //      
     //  }
 
-    private class Count
-    {
-
-    }
-    private Count _count;
-
     public ProcessFrame StartRun(Machine machine)
     {
         var inPNP = machine.InputPNP();
@@ -34,7 +28,7 @@ public class AutoRun : Node
         var carB = machine.GetNode<Car>("CarB");
         var outPNP = machine.GetNode<OutputPNP>("OutputPNP");
 
-        var runInputPNP = ProcessFrame.Create((p) =>
+        var runInputPNP = ProcessFrame.Create("Run_InputPNP", (p) =>
         {
             switch (p.Step)
             {
@@ -42,11 +36,9 @@ public class AutoRun : Node
                     p.aWait(inPNP.ToPick());
                     break;
                 case 1:
-                    //if (_count.)
                     p.aWait(inPNP.GetArm().Pick());
                     break;
                 case 2:
-                    //_count.
                     p.aWait(inPNP.ToPlace());
                     break;
                 case 3:
@@ -58,7 +50,7 @@ public class AutoRun : Node
             }
         });
 
-        var runCarA = ProcessFrame.Create((p) =>
+        var runCarA = ProcessFrame.Create("Run_CarA", (p) =>
         {
             switch (p.Step)
             {
@@ -77,7 +69,7 @@ public class AutoRun : Node
             }
         });
 
-        var runBackPNP = ProcessFrame.Create((p) =>
+        var runBackPNP = ProcessFrame.Create("Run_BackPNP", (p) =>
         {
             switch (p.Step)
             {
@@ -99,29 +91,29 @@ public class AutoRun : Node
             }
         });
 
-        var runFlipper = ProcessFrame.Create((p) =>
-         {
-             switch (p.Step)
-             {
-                 case ProcessFrame.ENTER:
-                     p.aWait(flipper.Sucker().Suck());
-                     break;
-                 case 1:
-                     p.aWait(flipper.Forward());
-                     break;
-                 case 2:
-                     p.aWait(flipper.Sucker().Blow());
-                     break;
-                 case 3:
-                     p.aWait(flipper.Backward());
-                     break;
-                 case 4:
-                     p.Exit();//SetStep(0);
-                     break;
-             }
-         });
+        var runFlipper = ProcessFrame.Create("Run_Flipper", (p) =>
+        {
+            switch (p.Step)
+            {
+                case ProcessFrame.ENTER:
+                    p.aWait(flipper.Sucker().Suck());
+                    break;
+                case 1:
+                    p.aWait(flipper.Forward());
+                    break;
+                case 2:
+                    p.aWait(flipper.Sucker().Blow());
+                    break;
+                case 3:
+                    p.aWait(flipper.Backward());
+                    break;
+                case 4:
+                    p.Exit();//SetStep(0);
+                    break;
+            }
+        });
 
-        var runCarB = ProcessFrame.Create((p) =>
+        var runCarB = ProcessFrame.Create("Run_CarB", (p) =>
         {
             switch (p.Step)
             {
@@ -140,29 +132,29 @@ public class AutoRun : Node
             }
         });
 
-        var runOutputPNP = ProcessFrame.Create((p) =>
-       {
-           switch (p.Step)
-           {
-               case ProcessFrame.ENTER:
-                   p.aWait(outPNP.ToPanelIn());
-                   break;
-               case 1:
-                   //if (_count.)
-                   p.aWait(outPNP.GetArm().Pick());
-                   break;
-               case 2:
-                   //_count.
-                   p.aWait(outPNP.ToPanelOut(0));
-                   break;
-               case 3:
-                   p.aWait(outPNP.GetArm().Place());
-                   break;
-               case 4:
-                   p.SetStep(0);
-                   break;
-           }
-       });
+        var runOutputPNP = ProcessFrame.Create("Run_OutputPNP", (p) =>
+        {
+            switch (p.Step)
+            {
+                case ProcessFrame.ENTER:
+                    p.aWait(outPNP.ToPanelIn());
+                    break;
+                case 1:
+                    //if (_count.)
+                    p.aWait(outPNP.GetArm().Pick());
+                    break;
+                case 2:
+                    //_count.
+                    p.aWait(outPNP.ToPanelOut(0));
+                    break;
+                case 3:
+                    p.aWait(outPNP.GetArm().Place());
+                    break;
+                case 4:
+                    p.SetStep(0);
+                    break;
+            }
+        });
 
         return ProcessFrame.Create((p) =>
         {

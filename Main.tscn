@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Machine.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Main.cs" type="Script" id=2]
-[ext_resource path="res://AutoRun.cs" type="Script" id=3]
+[ext_resource path="res://AutoRun1.cs" type="Script" id=3]
+[ext_resource path="res://AutoRun2.cs" type="Script" id=4]
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 2 )
@@ -10,18 +11,26 @@ script = ExtResource( 2 )
 [node name="Machine" parent="." instance=ExtResource( 1 )]
 position = Vector2( 22, 21 )
 
-[node name="BtnState" type="Button" parent="."]
-margin_left = 700.0
-margin_top = 34.0
-margin_right = 800.0
-margin_bottom = 74.0
-text = "Start"
+[node name="BtnStartAuto" type="Button" parent="."]
+margin_left = 819.0
+margin_top = 35.0
+margin_right = 919.0
+margin_bottom = 75.0
+text = "Start Auto"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="AutoRun" type="Node" parent="."]
-script = ExtResource( 3 )
+[node name="BtnStart" type="Button" parent="."]
+margin_left = 700.0
+margin_top = 35.0
+margin_right = 800.0
+margin_bottom = 75.0
+rect_pivot_offset = Vector2( 55, 61 )
+text = "Start"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="BtnFeedOnce" type="Button" parent="."]
 margin_left = 700.0
@@ -33,5 +42,67 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[connection signal="pressed" from="BtnState" to="." method="_on_BtnStart_pressed"]
+[node name="BtnStop" type="Button" parent="."]
+margin_left = 700.0
+margin_top = 160.0
+margin_right = 800.0
+margin_bottom = 200.0
+text = "Stop"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AutoRun1" type="Node" parent="."]
+script = ExtResource( 3 )
+
+[node name="AutoRun2" type="Node" parent="."]
+script = ExtResource( 4 )
+
+[node name="Btn0x" type="Button" parent="."]
+margin_left = 700.0
+margin_top = 234.0
+margin_right = 739.0
+margin_bottom = 254.0
+text = "0.0x"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Btn1x" type="Button" parent="."]
+margin_left = 700.0
+margin_top = 290.0
+margin_right = 739.0
+margin_bottom = 310.0
+text = "1.0x"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Btn2x" type="Button" parent="."]
+margin_left = 700.0
+margin_top = 318.0
+margin_right = 739.0
+margin_bottom = 338.0
+text = "2.0x"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Btn05x" type="Button" parent="."]
+margin_left = 700.0
+margin_top = 261.0
+margin_right = 739.0
+margin_bottom = 281.0
+text = "0.5x"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="BtnStartAuto" to="." method="_on_BtnStartAuto_pressed"]
+[connection signal="pressed" from="BtnStart" to="." method="_on_BtnStart_pressed"]
 [connection signal="pressed" from="BtnFeedOnce" to="." method="_on_BtnFeedOnce_pressed"]
+[connection signal="pressed" from="BtnStop" to="." method="_on_BtnStop_pressed"]
+[connection signal="pressed" from="Btn0x" to="." method="_on_Btn0x_pressed"]
+[connection signal="pressed" from="Btn1x" to="." method="_on_Btn1x_pressed"]
+[connection signal="pressed" from="Btn2x" to="." method="_on_Btn2x_pressed"]
+[connection signal="pressed" from="Btn05x" to="." method="_on_Btn05x_pressed"]

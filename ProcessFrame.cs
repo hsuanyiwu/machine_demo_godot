@@ -31,12 +31,13 @@ public class ProcessFrame
         _step = ENTER;
     }
 
-    private void Add(ProcessFrame subFrame)
+    private ProcessFrame Add(ProcessFrame subFrame)
     {
         if (subFrame._parent != null)
             subFrame._parent._subFrames.Remove(subFrame);
         subFrame._parent = this;
         _subFrames.Add(subFrame);
+        return subFrame;
     }
 
     public void SetName(string name)
@@ -44,14 +45,14 @@ public class ProcessFrame
         _name = name;
     }
 
-    public void aWait(ProcessFrame subFrame)
+    public ProcessFrame aWait(ProcessFrame subFrame)
     {
-        Add(subFrame);
+        return Add(subFrame);
     }
 
-    public void aWait(Action<ProcessFrame> actFrame)
+    public ProcessFrame aWait(Action<ProcessFrame> actFrame)
     {
-        Add(new ProcessFrame(actFrame));
+        return Add(new ProcessFrame(actFrame));
     }
 
     public int Step
@@ -113,7 +114,7 @@ public class ProcessFrame
         if (_function != null)
         {
             sb.Append(prefix + (tail ? "L" : "|-"));
-            sb.Append($"<{_name}> Step:{_step}");
+            sb.Append($"< {_name} > Step: {_step}");
             sb.AppendLine();
         }
 
@@ -175,7 +176,7 @@ public class ProcessFrame
     public static string CallStack()
     {
         var sb = new StringBuilder();
-        sb.AppendLine("call stack : {");
+        sb.AppendLine("{");
         _root.Print(sb, "", true);
         sb.AppendLine("}");
         return sb.ToString();

@@ -13,19 +13,10 @@ public class Machine : Node2D
 
     }
 
-    private int _frameCount;
-
     //  // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
     {
-        ProcessFrameTime.Elapsed = delta;
-        ProcessFrame.MoveStep();
-        if (++_frameCount > 30)
-        {
-            Console.Clear();
-            _frameCount = 0;
-            Console.Write(ProcessFrame.CallStack());
-        }
+
     }
 
     public InputPNP InputPNP()
