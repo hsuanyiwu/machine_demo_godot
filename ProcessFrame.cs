@@ -45,7 +45,7 @@ public class ProcessFrame
         _name = name;
     }
 
-    public ProcessFrame aWait(ProcessFrame subFrame)
+    public ProcessFrame Wait(ProcessFrame subFrame)
     {
         return Add(subFrame);
     }
@@ -157,6 +157,11 @@ public class ProcessFrame
         return process;
     }
 
+    public static void Terminate()
+    {
+        _root.Exit();
+    }
+
     public static void Defer(Action act)
     {
         _defer.Add(act);
@@ -188,7 +193,7 @@ public static class ProcessFrameExt
     public static void Delay(this ProcessFrame root, int msec)
     {
         float tick = msec;
-        root.aWait(ProcessFrame.Create("Delay", (p) =>
+        root.Wait(ProcessFrame.Create("Delay", (p) =>
         {
             if ((tick -= ProcessFrameTime.Elapsed * 1000) <= 0)
                 p.Exit();

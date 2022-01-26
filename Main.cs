@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 public class Main : Node2D
 {
@@ -47,6 +48,19 @@ public class Main : Node2D
         {
             btnStart.Disabled = btnStartAuto.Disabled = false;
         });
+    }
+
+    public void _on_BtnStartTest_pressed()
+    {
+        var machine = GetNode<Machine>("Machine");
+        var runAuto = GetNode<AutoRun1>("AutoRun1");
+        ProcessFrame.Emit(runAuto.StartTest(machine));
+    }
+
+    private void _on_BtnTerminate_pressed()
+    {
+        ProcessFrame.Terminate();
+        btnStart.Disabled = btnStartAuto.Disabled = false;
     }
 
     public void _on_BtnStart_pressed()

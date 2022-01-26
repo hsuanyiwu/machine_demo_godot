@@ -58,28 +58,31 @@ public class AutoRun2 : Node
             switch (p.Step)
             {
                 case ProcessFrame.ENTER:
-                    p.aWait(inPNP.ToPick());
+                    p.Wait(inPNP.ToPick());
                     break;
                 case 1:
                     if (isPickable())
-                        p.aWait(inPNP.GetArm().Pick()).ContinueWith(setPicked);
+                        p.Wait(inPNP.GetArm().Pick()).ContinueWith(setPicked);
                     else if (isStop())
                         p.SetStep(10);
                     break;
                 case 2:
-                    p.aWait(inPNP.ToPlace());
+                    p.Wait(inPNP.ToPlace());
                     break;
                 case 3:
                     if (isPlaceable())
-                        p.aWait(inPNP.GetArm().Place()).ContinueWith(setPlaced);
+                        p.Wait(inPNP.GetArm().Place()).ContinueWith(setPlaced);
                     break;
                 case 4:
                     p.SetStep(0);
                     break;
 
                 case 10:
-                    setStop();
-                    p.Exit();
+                    if (isPlaceable())
+                    {
+                        setStop();
+                        p.Exit();
+                    }
                     break;
             }
         });
@@ -88,8 +91,8 @@ public class AutoRun2 : Node
 
     public ProcessFrame StartRun(Machine machine)
     {
-        var inPNP = machine.InputPNP();
-        var carA = machine.CarA();
+        var inPNP = machine.GetNode<InputPNP>("InputPNP");
+        var carA = machine.GetNode<Car>("CarA");
         var backPNP = machine.GetNode<BackPNP>("BackPNP");
         var flipper = machine.GetNode<Flipper>("Flipper");
         var carB = machine.GetNode<Car>("CarB");
@@ -150,21 +153,21 @@ public class AutoRun2 : Node
             switch (p.Step)
             {
                 case ProcessFrame.ENTER:
-                    p.aWait(inPNP.ToPick());
+                    p.Wait(inPNP.ToPick());
                     break;
                 case 1:
                     if (_record.InputPNP == Flag.PUT)
-                        p.aWait(inPNP.GetArm().Pick());
+                        p.Wait(inPNP.GetArm().Pick());
                     else if (_record.InputPNP == Flag.STOP)
                         p.SetStep(10);
                     break;
                 case 2:
                     _record.InputPNP = Flag.NONE;
-                    p.aWait(inPNP.ToPlace());
+                    p.Wait(inPNP.ToPlace());
                     break;
                 case 3:
                     if (_record.CarA == Flag.NONE)
-                        p.aWait(inPNP.GetArm().Place());
+                        p.Wait(inPNP.GetArm().Place());
                     break;
                 case 4:
                     _record.CarA = Flag.PUT;
@@ -195,7 +198,7 @@ public class AutoRun2 : Node
             switch (p.Step)
             {
                 case ProcessFrame.ENTER:
-                    p.aWait(carA.ToPanelIn());
+                    p.Wait(carA.ToPanelIn());
                     break;
                 case 1:
                     _record.CarA = Flag.NONE;
@@ -203,18 +206,18 @@ public class AutoRun2 : Node
                     break;
                 case 2:
                     if (_record.CarA == Flag.PUT)
-                        p.aWait(carA.Suck());
+                        p.Wait(carA.Suck());
                     else if (_record.CarA == Flag.STOP)
                         p.SetStep(10);
                     break;
                 case 3:
-                    p.aWait(carA.DoScan());
+                    p.Wait(carA.DoScan());
                     break;
                 case 4:
-                    p.aWait(carA.ToPanelOut());
+                    p.Wait(carA.ToPanelOut());
                     break;
                 case 5:
-                    p.aWait(carA.Blow());
+                    p.Wait(carA.Blow());
                     break;
                 case 6:
                     _record.BackPNP = Flag.PUT;
@@ -240,11 +243,11 @@ public class AutoRun2 : Node
             switch (p.Step)
             {
                 case ProcessFrame.ENTER:
-                    p.aWait(backPNP.ToPanelIn());
+                    p.Wait(backPNP.ToPanelIn());
                     break;
                 case 1:
                     if (_record.BackPNP == Flag.PUT)
-                        p.aWait(backPNP.GetArm().Pick());
+                        p.Wait(backPNP.GetArm().Pick());
                     else if (_record.BackPNP == Flag.STOP)
                         p.SetStep(10);
                     break;
@@ -254,14 +257,14 @@ public class AutoRun2 : Node
                     break;
                 case 3:
                     if (_record.Flipper == Flag.NONE)
-                        p.aWait(backPNP.ToPanelOut());
+                        p.Wait(backPNP.ToPanelOut());
                     break;
                 case 4:
-                    p.aWait(backPNP.GetArm().Place());
+                    p.Wait(backPNP.GetArm().Place());
                     break;
                 case 5:
                     _record.Flipper = Flag.PUT;
-                    p.aWait(backPNP.ToPanelIn());
+                    p.Wait(backPNP.ToPanelIn());
                     break;
                 case 6:
                     _record.Flipper = Flag.SAFE;
@@ -284,20 +287,20 @@ public class AutoRun2 : Node
             {
                 case ProcessFrame.ENTER:
                     if (_record.Flipper == Flag.PUT)
-                        p.aWait(flipper.Sucker().Suck());
+                        p.Wait(flipper.Sucker().Suck());
                     else if (_record.Flipper == Flag.STOP)
                         p.SetStep(10);
                     break;
                 case 1:
                     if (_record.Flipper == Flag.SAFE && _record.CarB == Flag.NONE)
-                        p.aWait(flipper.Forward());
+                        p.Wait(flipper.Forward());
                     break;
                 case 2:
-                    p.aWait(flipper.Sucker().Blow());
+                    p.Wait(flipper.Sucker().Blow());
                     break;
                 case 3:
                     _record.CarB = Flag.PUT;
-                    p.aWait(flipper.Backward());
+                    p.Wait(flipper.Backward());
                     break;
                 case 4:
                     _record.CarB = Flag.SAFE;
@@ -320,7 +323,7 @@ public class AutoRun2 : Node
             switch (p.Step)
             {
                 case ProcessFrame.ENTER:
-                    p.aWait(carB.ToPanelIn());
+                    p.Wait(carB.ToPanelIn());
                     break;
                 case 1:
                     _record.CarB = Flag.NONE;
@@ -328,19 +331,19 @@ public class AutoRun2 : Node
                     break;
                 case 2:
                     if (_record.CarB == Flag.PUT)
-                        p.aWait(carB.Suck());
+                        p.Wait(carB.Suck());
                     else if (_record.CarB == Flag.STOP)
                         p.SetStep(10);
                     break;
                 case 3:
                     if (_record.CarB == Flag.SAFE)
-                        p.aWait(carB.DoScan());
+                        p.Wait(carB.DoScan());
                     break;
                 case 4:
-                    p.aWait(carB.ToPanelOut());
+                    p.Wait(carB.ToPanelOut());
                     break;
                 case 5:
-                    p.aWait(carB.Blow());
+                    p.Wait(carB.Blow());
                     break;
                 case 6:
                     _record.OutputPNP = Flag.PUT;
@@ -353,7 +356,7 @@ public class AutoRun2 : Node
 
                 case 10:
                     if (_record.OutputPNP == Flag.NONE)
-                        p.aWait(carB.ToPanelOut());
+                        p.Wait(carB.ToPanelOut());
                     break;
                 case 11:
                     _record.OutputPNP = Flag.STOP;
@@ -367,20 +370,20 @@ public class AutoRun2 : Node
             switch (p.Step)
             {
                 case ProcessFrame.ENTER:
-                    p.aWait(outPNP.ToPanelIn());
+                    p.Wait(outPNP.ToPanelIn());
                     break;
                 case 1:
                     if (_record.OutputPNP == Flag.PUT)
-                        p.aWait(outPNP.GetArm().Pick());
+                        p.Wait(outPNP.GetArm().Pick());
                     else if (_record.OutputPNP == Flag.STOP)
                         p.SetStep(10);
                     break;
                 case 2:
                     _record.OutputPNP = Flag.NONE;
-                    p.aWait(outPNP.ToPanelOut(rand.Next(0, 1)));
+                    p.Wait(outPNP.ToPanelOut(rand.Next(0, 1)));
                     break;
                 case 3:
-                    p.aWait(outPNP.GetArm().Place());
+                    p.Wait(outPNP.GetArm().Place());
                     break;
                 case 4:
                     p.SetStep(0);
@@ -398,15 +401,15 @@ public class AutoRun2 : Node
             {
                 case ProcessFrame.ENTER:
                     if (_feedAuto)
-                        p.aWait(runAutoFeed);
+                        p.Wait(runAutoFeed);
                     else
-                        p.aWait(runFeedPanel);
-                    p.aWait(runInputPNP);
-                    p.aWait(runCarA);
-                    p.aWait(runBackPNP);
-                    p.aWait(runFlipper);
-                    p.aWait(runCarB);
-                    p.aWait(runOutputPNP);
+                        p.Wait(runFeedPanel);
+                    p.Wait(runInputPNP);
+                    p.Wait(runCarA);
+                    p.Wait(runBackPNP);
+                    p.Wait(runFlipper);
+                    p.Wait(runCarB);
+                    p.Wait(runOutputPNP);
                     break;
                 case 1:
                     p.Exit();

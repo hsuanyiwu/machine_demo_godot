@@ -33,65 +33,71 @@ public class InputPNP : ColorRect
         return _xMove.MoveTo(_xPosPlace);
     }
 
-    public void RunLoop()
-    {
-        _step = 10;
-    }
 
     //  // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
     {
     }
 
-    private void RunLoop_()
+    private const int IDLE = 0;
+    private const int PICK = 100;
+    private const int PLACE = 200;
+
+    public void Pick_()
+    {
+        _step = PICK;
+    }
+
+    public bool MotinoDone
+    {
+        get { return _step == IDLE; }
+    }
+
+    private void process_()
     {
         // run loop
         switch (_step)
         {
             // pick
-            case 10:
+            case PICK:
                 _xMove.MoveTo(_xPosPick);
                 _step += 1;
                 break;
 
-            case 11:
+            case PICK + 1:
                 if (_xMove.MotionDone)
                     _step += 1;
                 break;
 
-            case 12:
+            case PICK + 2:
                 _pnpArm.Pick();
                 _step += 1;
                 break;
 
-            case 13:
+            case PICK + 3:
                 if (_pnpArm.MotionDone)
-                    _step = 20;
+                    _step = IDLE;
                 break;
 
             // place
-            case 20:
+            case PLACE:
                 _xMove.MoveTo(_xPosPlace);
                 _step += 1;
                 break;
 
-            case 21:
+            case PLACE + 1:
                 if (_xMove.MotionDone)
                     _step += 1;
                 break;
 
-            case 22:
+            case PLACE + 2:
                 _pnpArm.Place();
                 _step += 1;
                 break;
 
-            case 23:
+            case PLACE + 3:
                 if (_pnpArm.MotionDone)
-                    _step += 1;
-                break;
-
-            case 24:
-                _step = 10;
+                    _step = IDLE;
                 break;
         }
     }

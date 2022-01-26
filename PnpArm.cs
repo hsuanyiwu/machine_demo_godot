@@ -23,13 +23,13 @@ public class PnpArm : TextureRect
             switch (p.Step)
             {
                 case ProcessFrame.ENTER:
-                    p.aWait(_zMove.MoveTo(_zPosDown));
+                    p.Wait(_zMove.MoveTo(_zPosDown));
                     break;
                 case 1:
-                    p.aWait(_sucker.Suck());
+                    p.Wait(_sucker.Suck());
                     break;
                 case 2:
-                    p.aWait(_zMove.MoveTo(_zPosUp));
+                    p.Wait(_zMove.MoveTo(_zPosUp));
                     break;
                 case 3:
                     p.Exit();
@@ -45,13 +45,13 @@ public class PnpArm : TextureRect
             switch (p.Step)
             {
                 case ProcessFrame.ENTER:
-                    p.aWait(_zMove.MoveTo(_zPosDown));
+                    p.Wait(_zMove.MoveTo(_zPosDown));
                     break;
                 case 1:
-                    p.aWait(_sucker.Blow());
+                    p.Wait(_sucker.Blow());
                     break;
                 case 2:
-                    p.aWait(_zMove.MoveTo(_zPosUp));
+                    p.Wait(_zMove.MoveTo(_zPosUp));
                     break;
                 case 3:
                     p.Exit();

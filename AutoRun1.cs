@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 public class AutoRun1 : Node
 {
@@ -19,7 +20,13 @@ public class AutoRun1 : Node
     //      
     //  }
 
-    public ProcessFrame StartRun(Machine machine)
+    private bool _stop = false;
+    public void StopTest()
+    {
+        _stop = true;
+    }
+
+    public ProcessFrame StartTest(Machine machine)
     {
         var inPNP = machine.InputPNP();
         var carA = machine.CarA();
@@ -33,16 +40,16 @@ public class AutoRun1 : Node
             switch (p.Step)
             {
                 case ProcessFrame.ENTER:
-                    p.aWait(inPNP.ToPick());
+                    p.Wait(inPNP.ToPick());
                     break;
                 case 1:
-                    p.aWait(inPNP.GetArm().Pick());
+                    p.Wait(inPNP.GetArm().Pick());
                     break;
                 case 2:
-                    p.aWait(inPNP.ToPlace());
+                    p.Wait(inPNP.ToPlace());
                     break;
                 case 3:
-                    p.aWait(inPNP.GetArm().Place());
+                    p.Wait(inPNP.GetArm().Place());
                     break;
                 case 4:
                     p.SetStep(0);
@@ -55,13 +62,13 @@ public class AutoRun1 : Node
             switch (p.Step)
             {
                 case ProcessFrame.ENTER:
-                    p.aWait(carA.ToPanelIn());
+                    p.Wait(carA.ToPanelIn());
                     break;
                 case 1:
-                    p.aWait(carA.DoScan());
+                    p.Wait(carA.DoScan());
                     break;
                 case 2:
-                    p.aWait(carA.ToPanelOut());
+                    p.Wait(carA.ToPanelOut());
                     break;
                 case 3:
                     p.SetStep(0);
@@ -74,16 +81,16 @@ public class AutoRun1 : Node
             switch (p.Step)
             {
                 case ProcessFrame.ENTER:
-                    p.aWait(backPNP.ToPanelIn());
+                    p.Wait(backPNP.ToPanelIn());
                     break;
                 case 1:
-                    p.aWait(backPNP.GetArm().Pick());
+                    p.Wait(backPNP.GetArm().Pick());
                     break;
                 case 2:
-                    p.aWait(backPNP.ToPanelOut());
+                    p.Wait(backPNP.ToPanelOut());
                     break;
                 case 3:
-                    p.aWait(backPNP.GetArm().Pick());
+                    p.Wait(backPNP.GetArm().Pick());
                     break;
                 case 4:
                     p.SetStep(0);
@@ -96,16 +103,16 @@ public class AutoRun1 : Node
             switch (p.Step)
             {
                 case ProcessFrame.ENTER:
-                    p.aWait(flipper.Sucker().Suck());
+                    p.Wait(flipper.Sucker().Suck());
                     break;
                 case 1:
-                    p.aWait(flipper.Forward());
+                    p.Wait(flipper.Forward());
                     break;
                 case 2:
-                    p.aWait(flipper.Sucker().Blow());
+                    p.Wait(flipper.Sucker().Blow());
                     break;
                 case 3:
-                    p.aWait(flipper.Backward());
+                    p.Wait(flipper.Backward());
                     break;
                 case 4:
                     p.Exit();//SetStep(0);
@@ -118,13 +125,13 @@ public class AutoRun1 : Node
             switch (p.Step)
             {
                 case ProcessFrame.ENTER:
-                    p.aWait(carB.ToPanelIn());
+                    p.Wait(carB.ToPanelIn());
                     break;
                 case 1:
-                    p.aWait(carB.DoScan());
+                    p.Wait(carB.DoScan());
                     break;
                 case 2:
-                    p.aWait(carB.ToPanelOut());
+                    p.Wait(carB.ToPanelOut());
                     break;
                 case 3:
                     p.SetStep(0);
@@ -137,18 +144,16 @@ public class AutoRun1 : Node
             switch (p.Step)
             {
                 case ProcessFrame.ENTER:
-                    p.aWait(outPNP.ToPanelIn());
+                    p.Wait(outPNP.ToPanelIn());
                     break;
                 case 1:
-                    //if (_count.)
-                    p.aWait(outPNP.GetArm().Pick());
+                    p.Wait(outPNP.GetArm().Pick());
                     break;
                 case 2:
-                    //_count.
-                    p.aWait(outPNP.ToPanelOut(0));
+                    p.Wait(outPNP.ToPanelOut(0));
                     break;
                 case 3:
-                    p.aWait(outPNP.GetArm().Place());
+                    p.Wait(outPNP.GetArm().Place());
                     break;
                 case 4:
                     p.SetStep(0);
@@ -161,12 +166,12 @@ public class AutoRun1 : Node
             switch (p.Step)
             {
                 case ProcessFrame.ENTER:
-                    p.aWait(runInputPNP);
-                    p.aWait(runCarA);
-                    p.aWait(runBackPNP);
-                    p.aWait(runFlipper);
-                    p.aWait(runCarB);
-                    p.aWait(runOutputPNP);
+                    p.Wait(runInputPNP);
+                    p.Wait(runCarA);
+                    p.Wait(runBackPNP);
+                    p.Wait(runFlipper);
+                    p.Wait(runCarB);
+                    p.Wait(runOutputPNP);
                     break;
                 case 1:
                     p.Exit();
@@ -174,4 +179,26 @@ public class AutoRun1 : Node
             }
         });
     }
+
+    /*public async Task RunTest_Async()
+    {
+        var runInput = Task.Run(async () =>
+        {
+            await inputPNP.ToPanelIn();
+            await inputPNP.DoPick();
+            await inputPNP.ToPanelOut();
+            await InputPNP.DoPlace();
+        });
+
+        var runCarA = Task.Run(async () =>
+        {
+            await carA.ToPanelIn();
+            await carA.DoScan();
+            await carA.ToPanelOut();
+        });
+
+        //...
+
+        Task.WaitAll(...);
+    }*/
 }

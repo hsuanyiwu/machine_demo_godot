@@ -47,7 +47,18 @@ margin_left = 700.0
 margin_top = 160.0
 margin_right = 800.0
 margin_bottom = 200.0
+rect_pivot_offset = Vector2( -359, -49 )
 text = "Stop"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BtnStartTest" type="Button" parent="."]
+margin_left = 696.0
+margin_top = 428.0
+margin_right = 768.0
+margin_bottom = 468.0
+text = "Start Test"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -98,11 +109,23 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="BtnTerminate" type="Button" parent="."]
+margin_left = 863.0
+margin_top = 427.0
+margin_right = 956.0
+margin_bottom = 467.0
+text = "Terminate"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="pressed" from="BtnStartAuto" to="." method="_on_BtnStartAuto_pressed"]
 [connection signal="pressed" from="BtnStart" to="." method="_on_BtnStart_pressed"]
 [connection signal="pressed" from="BtnFeedOnce" to="." method="_on_BtnFeedOnce_pressed"]
 [connection signal="pressed" from="BtnStop" to="." method="_on_BtnStop_pressed"]
+[connection signal="pressed" from="BtnStartTest" to="." method="_on_BtnStartTest_pressed"]
 [connection signal="pressed" from="Btn0x" to="." method="_on_Btn0x_pressed"]
 [connection signal="pressed" from="Btn1x" to="." method="_on_Btn1x_pressed"]
 [connection signal="pressed" from="Btn2x" to="." method="_on_Btn2x_pressed"]
 [connection signal="pressed" from="Btn05x" to="." method="_on_Btn05x_pressed"]
+[connection signal="pressed" from="BtnTerminate" to="." method="_on_BtnTerminate_pressed"]
