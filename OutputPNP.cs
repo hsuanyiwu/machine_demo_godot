@@ -24,12 +24,12 @@ public class OutputPNP : ColorRect
     //      
     //  }
 
-    public ProcessFrame ToPanelIn()
+    public MoveTask ToPanelIn()
     {
         return _xMove.MoveTo(_xPanelIn);
     }
 
-    public ProcessFrame ToPanelOut(int index)
+    public MoveTask ToPanelOut(int index)
     {
         if (index == 0)
             return _xMove.MoveTo(_xPanelOut0);

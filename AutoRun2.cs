@@ -49,15 +49,15 @@ public class AutoRun2 : Node
         _feedAuto = enable;
     }
 
-    private ProcessFrame Run_InputPNP(InputPNP inPNP,
+    private MoveTask Run_InputPNP(InputPNP inPNP,
         Func<bool> isStop, Func<bool> isPickable, Action setPicked,
         Func<bool> isPlaceable, Action setPlaced, Action setStop)
     {
-        return ProcessFrame.Create("Run_InputPNP", (p) =>
+        return MoveTask.Create("Run_InputPNP", (p) =>
         {
             switch (p.Step)
             {
-                case ProcessFrame.ENTER:
+                case MoveTask.ENTER:
                     p.Wait(inPNP.ToPick());
                     break;
                 case 1:
@@ -89,7 +89,7 @@ public class AutoRun2 : Node
 
     }
 
-    public ProcessFrame StartRun(Machine machine)
+    public MoveTask StartRun(Machine machine)
     {
         var inPNP = machine.GetNode<InputPNP>("InputPNP");
         var carA = machine.GetNode<Car>("CarA");
@@ -101,11 +101,11 @@ public class AutoRun2 : Node
         var rand = new Random();
         _feedType = 0;
 
-        var runAutoFeed = ProcessFrame.Create("Run Auto Feed Panel", (p) =>
+        var runAutoFeed = MoveTask.Create("Run Auto Feed Panel", (p) =>
         {
             switch (p.Step)
             {
-                case ProcessFrame.ENTER:
+                case MoveTask.ENTER:
                     if (_feedType == Flag.STOP)
                     {
                         _record.InputPNP = Flag.STOP;
@@ -124,11 +124,11 @@ public class AutoRun2 : Node
             }
         });
 
-        var runFeedPanel = ProcessFrame.Create("Run Feed Panel", (p) =>
+        var runFeedPanel = MoveTask.Create("Run Feed Panel", (p) =>
         {
             switch (p.Step)
             {
-                case ProcessFrame.ENTER:
+                case MoveTask.ENTER:
                     if (_feedType == Flag.PUT)
                     {
                         _record.InputPNP = Flag.PUT;
@@ -148,11 +148,11 @@ public class AutoRun2 : Node
             }
         });
 
-        var runInputPNP = ProcessFrame.Create("Run_InputPNP", (p) =>
+        var runInputPNP = MoveTask.Create("Run_InputPNP", (p) =>
         {
             switch (p.Step)
             {
-                case ProcessFrame.ENTER:
+                case MoveTask.ENTER:
                     p.Wait(inPNP.ToPick());
                     break;
                 case 1:
@@ -193,11 +193,11 @@ public class AutoRun2 : Node
             setStop: () => { _record.CarA = Flag.STOP; }
         );
 
-        var runCarA = ProcessFrame.Create("Run_CarA", (p) =>
+        var runCarA = MoveTask.Create("Run_CarA", (p) =>
         {
             switch (p.Step)
             {
-                case ProcessFrame.ENTER:
+                case MoveTask.ENTER:
                     p.Wait(carA.ToPanelIn());
                     break;
                 case 1:
@@ -238,11 +238,11 @@ public class AutoRun2 : Node
             }
         });
 
-        var runBackPNP = ProcessFrame.Create("Run_BackPNP", (p) =>
+        var runBackPNP = MoveTask.Create("Run_BackPNP", (p) =>
         {
             switch (p.Step)
             {
-                case ProcessFrame.ENTER:
+                case MoveTask.ENTER:
                     p.Wait(backPNP.ToPanelIn());
                     break;
                 case 1:
@@ -281,11 +281,11 @@ public class AutoRun2 : Node
             }
         });
 
-        var runFlipper = ProcessFrame.Create("Run_Flipper", (p) =>
+        var runFlipper = MoveTask.Create("Run_Flipper", (p) =>
         {
             switch (p.Step)
             {
-                case ProcessFrame.ENTER:
+                case MoveTask.ENTER:
                     if (_record.Flipper == Flag.PUT)
                         p.Wait(flipper.Sucker().Suck());
                     else if (_record.Flipper == Flag.STOP)
@@ -318,11 +318,11 @@ public class AutoRun2 : Node
             }
         });
 
-        var runCarB = ProcessFrame.Create("Run_CarB", (p) =>
+        var runCarB = MoveTask.Create("Run_CarB", (p) =>
         {
             switch (p.Step)
             {
-                case ProcessFrame.ENTER:
+                case MoveTask.ENTER:
                     p.Wait(carB.ToPanelIn());
                     break;
                 case 1:
@@ -365,11 +365,11 @@ public class AutoRun2 : Node
             }
         });
 
-        var runOutputPNP = ProcessFrame.Create("Run_OutputPNP", (p) =>
+        var runOutputPNP = MoveTask.Create("Run_OutputPNP", (p) =>
         {
             switch (p.Step)
             {
-                case ProcessFrame.ENTER:
+                case MoveTask.ENTER:
                     p.Wait(outPNP.ToPanelIn());
                     break;
                 case 1:
@@ -395,11 +395,11 @@ public class AutoRun2 : Node
             }
         });
 
-        return ProcessFrame.Create((p) =>
+        return MoveTask.Create((p) =>
         {
             switch (p.Step)
             {
-                case ProcessFrame.ENTER:
+                case MoveTask.ENTER:
                     if (_feedAuto)
                         p.Wait(runAutoFeed);
                     else

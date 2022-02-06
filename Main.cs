@@ -25,13 +25,13 @@ public class Main : Node2D
     //  // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
     {
-        ProcessFrameTime.Elapsed = delta * _updateRate;
-        ProcessFrame.MoveStep();
+        MoveTaskTime.Elapsed = delta * _updateRate;
+        MoveTask.MoveStep();
         if (++_frameCount > 30)
         {
             _frameCount = 0;
             Console.Clear();
-            Console.Write(ProcessFrame.CallStack());
+            Console.Write(MoveTask.CallStack());
         }
     }
 
@@ -44,7 +44,7 @@ public class Main : Node2D
         btnStart.Disabled = btnStartAuto.Disabled = true;
         runAuto.SetAutoFeed(autoFeed);
 
-        ProcessFrame.Emit(runAuto.StartRun(machine)).ContinueWith(() =>
+        MoveTask.Emit(runAuto.StartRun(machine)).ContinueWith(() =>
         {
             btnStart.Disabled = btnStartAuto.Disabled = false;
         });
@@ -54,12 +54,12 @@ public class Main : Node2D
     {
         var machine = GetNode<Machine>("Machine");
         var runAuto = GetNode<AutoRun1>("AutoRun1");
-        ProcessFrame.Emit(runAuto.StartTest(machine));
+        MoveTask.Emit(runAuto.StartTest(machine));
     }
 
     private void _on_BtnTerminate_pressed()
     {
-        ProcessFrame.Terminate();
+        MoveTask.Terminate();
         btnStart.Disabled = btnStartAuto.Disabled = false;
     }
 

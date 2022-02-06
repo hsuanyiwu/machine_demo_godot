@@ -22,11 +22,11 @@ public class BackPNP : ColorRect
     //      
     //  }
 
-    public ProcessFrame ToPanelIn()
+    public MoveTask ToPanelIn()
     {
         return _xMove.MoveTo(_xPanelIn);
     }
-    public ProcessFrame ToPanelOut()
+    public MoveTask ToPanelOut()
     {
         return _xMove.MoveTo(_xPanelOut);
     }

@@ -23,12 +23,12 @@ public class InputPNP : ColorRect
         return GetNode<PnpArm>("Acuator/PnpArm");
     }
 
-    public ProcessFrame ToPick()
+    public MoveTask ToPick()
     {
         return _xMove.MoveTo(_xPosPick);
     }
 
-    public ProcessFrame ToPlace()
+    public MoveTask ToPlace()
     {
         return _xMove.MoveTo(_xPosPlace);
     }

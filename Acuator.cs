@@ -60,15 +60,15 @@ public class Acuator : Node2D
                 break;
         }
     }
-    public ProcessFrame MoveTo(float target)
+    public MoveTask MoveTo(float target)
     {
         //Console.WriteLine($"target={target}");
         float dist = Math.Abs(target - _position);
         _dir = target > _position ? 1 : -1;
 
-        return ProcessFrame.Create((p) =>
+        return MoveTask.Create((p) =>
         {
-            dist -= ProcessFrameTime.Elapsed * Speed;
+            dist -= MoveTaskTime.Elapsed * Speed;
             if (dist <= 0)
             {
                 dist = 0;

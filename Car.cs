@@ -29,29 +29,29 @@ public class Car : ColorRect
     //      
     //  }
 
-    public ProcessFrame ToPanelIn()
+    public MoveTask ToPanelIn()
     {
         return _yMove.MoveTo(_yPosIn);
     }
 
-    public ProcessFrame ToPanelOut()
+    public MoveTask ToPanelOut()
     {
         return _yMove.MoveTo(_yPosOut);
     }
 
-    public ProcessFrame Suck()
+    public MoveTask Suck()
     {
         return GetNode<Sucker>("Acuator/Platform").Suck();
     }
 
-    public ProcessFrame Blow()
+    public MoveTask Blow()
     {
         return GetNode<Sucker>("Acuator/Platform").Blow();
     }
 
-    public ProcessFrame DoScan()
+    public MoveTask DoScan()
     {
-        return ProcessFrame.Create((p) =>
+        return MoveTask.Create((p) =>
         {
             p.Exit();
         });

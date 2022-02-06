@@ -2,28 +2,28 @@
 using System.Collections.Generic;
 using System.Text;
 
-public class ProcessFrameTime
+public class MoveTaskTime
 {
     public static float Elapsed = 1.0f;
 }
 
-public class ProcessFrame
+public class MoveTask
 {
-    private ProcessFrame _parent;
-    private Action<ProcessFrame> _function;
-    private List<ProcessFrame> _subFrames = new List<ProcessFrame>();
+    private MoveTask _parent;
+    private Action<MoveTask> _function;
+    private List<MoveTask> _subFrames = new List<MoveTask>();
     private string _name = string.Empty;
     private int _step;
     private Action _after;
 
     public const int ENTER = 0;
 
-    private ProcessFrame()
+    private MoveTask()
         : this(null)
     {
     }
 
-    private ProcessFrame(Action<ProcessFrame> func)
+    private MoveTask(Action<MoveTask> func)
     {
         if (func != null)
             _name = func.Method.Name;
@@ -31,7 +31,7 @@ public class ProcessFrame
         _step = ENTER;
     }
 
-    private ProcessFrame Add(ProcessFrame subFrame)
+    private MoveTask Add(MoveTask subFrame)
     {
         if (subFrame._parent != null)
             subFrame._parent._subFrames.Remove(subFrame);
@@ -45,14 +45,14 @@ public class ProcessFrame
         _name = name;
     }
 
-    public ProcessFrame Wait(ProcessFrame subFrame)
+    public MoveTask Wait(MoveTask subFrame)
     {
         return Add(subFrame);
     }
 
-    public ProcessFrame aWait(Action<ProcessFrame> actFrame)
+    public MoveTask aWait(Action<MoveTask> actFrame)
     {
-        return Add(new ProcessFrame(actFrame));
+        return Add(new MoveTask(actFrame));
     }
 
     public int Step
@@ -128,12 +128,12 @@ public class ProcessFrame
         }
     }
 
-    private static ProcessFrame _root = new ProcessFrame();
+    private static MoveTask _root = new MoveTask();
     private static List<Action> _defer = new List<Action>();
 
-    public static ProcessFrame Create(Action<ProcessFrame> function)
+    public static MoveTask Create(Action<MoveTask> function)
     {
-        return new ProcessFrame(function);
+        return new MoveTask(function);
     }
 
     /*public static ProcessFrame WaitAll(params ProcessFrame[] frames)
@@ -144,14 +144,14 @@ public class ProcessFrame
         return tmp;
     }*/
 
-    public static ProcessFrame Create(string name, Action<ProcessFrame> function)
+    public static MoveTask Create(string name, Action<MoveTask> function)
     {
-        var frame = new ProcessFrame(function);
+        var frame = new MoveTask(function);
         frame.SetName(name);
         return frame;
     }
 
-    public static ProcessFrame Emit(ProcessFrame process)
+    public static MoveTask Emit(MoveTask process)
     {
         _root.Add(process);
         return process;
@@ -188,14 +188,14 @@ public class ProcessFrame
     }
 
 }
-public static class ProcessFrameExt
+public static class MoveTaskExt
 {
-    public static void Delay(this ProcessFrame root, int msec)
+    public static void Delay(this MoveTask root, int msec)
     {
         float tick = msec;
-        root.Wait(ProcessFrame.Create("Delay", (p) =>
+        root.Wait(MoveTask.Create("Delay", (p) =>
         {
-            if ((tick -= ProcessFrameTime.Elapsed * 1000) <= 0)
+            if ((tick -= MoveTaskTime.Elapsed * 1000) <= 0)
                 p.Exit();
         }));
     }

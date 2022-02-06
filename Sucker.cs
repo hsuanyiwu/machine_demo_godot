@@ -25,13 +25,13 @@ public class Sucker : TextureRect
     //      
     //  }
 
-    public ProcessFrame Suck()
+    public MoveTask Suck()
     {
-        return ProcessFrame.Create((p) =>
+        return MoveTask.Create((p) =>
         {
             switch (p.Step)
             {
-                case ProcessFrame.ENTER:
+                case MoveTask.ENTER:
                     this.Modulate = new Color(88, 0, 0);
                     p.Delay(this.SuckTime);
                     break;
@@ -43,13 +43,13 @@ public class Sucker : TextureRect
         });
     }
 
-    public ProcessFrame Blow()
+    public MoveTask Blow()
     {
-        return ProcessFrame.Create((p) =>
+        return MoveTask.Create((p) =>
         {
             switch (p.Step)
             {
-                case ProcessFrame.ENTER:
+                case MoveTask.ENTER:
                     this.Modulate = new Color(0, 0, 88);
                     p.Delay(this.BlowTime);
                     break;

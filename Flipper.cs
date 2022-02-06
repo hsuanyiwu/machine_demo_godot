@@ -15,12 +15,12 @@ public class Flipper : ColorRect
     //      
     //  }
 
-    public ProcessFrame Forward()
+    public MoveTask Forward()
     {
         return GetNode<Acuator>("Acuator").MoveTo(180);
     }
 
-    public ProcessFrame Backward()
+    public MoveTask Backward()
     {
         return GetNode<Acuator>("Acuator").MoveTo(0);
     }

@@ -16,13 +16,13 @@ public class PnpArm : TextureRect
         _sucker = GetNode<Sucker>("Acuator/Sucker");
     }
 
-    public ProcessFrame Pick()
+    public MoveTask Pick()
     {
-        return ProcessFrame.Create((p) =>
+        return MoveTask.Create((p) =>
         {
             switch (p.Step)
             {
-                case ProcessFrame.ENTER:
+                case MoveTask.ENTER:
                     p.Wait(_zMove.MoveTo(_zPosDown));
                     break;
                 case 1:
@@ -38,13 +38,13 @@ public class PnpArm : TextureRect
         });
     }
 
-    public ProcessFrame Place()
+    public MoveTask Place()
     {
-        return ProcessFrame.Create((p) =>
+        return MoveTask.Create((p) =>
         {
             switch (p.Step)
             {
-                case ProcessFrame.ENTER:
+                case MoveTask.ENTER:
                     p.Wait(_zMove.MoveTo(_zPosDown));
                     break;
                 case 1:
